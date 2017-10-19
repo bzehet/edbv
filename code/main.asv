@@ -31,14 +31,4 @@ imageBin = otsu(image);
 %the formula will be calculated by previous methods
 formula= '7+4=';
 
-result = calculate(formula);
-fprintf('Ergebnis: %d\n', result);
-sol = solution(imageNumber+1);
-fprintf('Lösung: %d\n', sol);
-if(result == sol)
-    disp('Das Ergebnis ist korrekt!');
-else
-    disp('Das Ergebnis ist nicht korrekt!');
-end
-
-
+disp('
