@@ -29,16 +29,17 @@ imageBin = otsu(image);
 %currently not required
 
 %the formula will be calculated by previous methods
-formula= '7+4=';
+formula= '7+4';
 
 result = calculate(formula);
+fprintf('Formel: %s\n', formula);
 fprintf('Ergebnis: %d\n', result);
 sol = solution(imageNumber+1);
 fprintf('Lösung: %d\n', sol);
 if(result == sol)
-    disp('Das Ergebnis ist korrekt!');
+    fprintf('Das Ergebnis ist korrekt!\n\n');
 else
-    disp('Das Ergebnis ist nicht korrekt!');
+    disp('Das Ergebnis ist nicht korrekt!\n\n');
 end
 
 
