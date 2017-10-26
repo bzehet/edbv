@@ -8,7 +8,8 @@
 %
 %Technische Universität Wien
 %
-
+load('hundredEpochs.mat');
+[output percentage] = DirectRun(cnn, '27.jpg')
 filename = 'testset/image_numbers.xlsx';
 solution = xlsread(filename,'C3:C102');
 
