@@ -41,17 +41,19 @@ end
 %currently not required
 
 %the formula will be calculated by previous methods
-formula= '7+4';
+formulas= {'7+4' '(4+2)*3' '(80/2)-11'};
 
-result = calculate(formula);
-fprintf('Formel: %s\n', formula);
-fprintf('Ergebnis: %d\n', result);
-sol = solution(imageNumber(1)+1);
+result = calculate(formulas);
+for i=1:size(result,2)
+fprintf('Formel: %s\n', formulas{i});
+fprintf('Ergebnis: %d\n', result(i));
+sol = solution(imageNumber(i)+1);
 fprintf('Lösung: %d\n', sol);
-if(result == sol)
+if(result(i) == sol)
     fprintf('Das Ergebnis ist korrekt!\n\n');
 else
-    disp('Das Ergebnis ist nicht korrekt!\n\n');
+    fprintf('Das Ergebnis ist nicht korrekt!\n\n');
+end
 end
 
 
