@@ -1,4 +1,4 @@
-function[result]=Cleaning(input)
+function[result]=cleaning(input)
 sizeOf = size(input);
 import java.util.LinkedList
 q = LinkedList();
@@ -28,5 +28,5 @@ while (size(q)~=0)
     end
 end
 result = input;
-imshow(result);
 end
+
