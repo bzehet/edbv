@@ -68,11 +68,11 @@ end
 
 function [image] = changeSize(input)
 sizeOfInp = size(input);
-image = zeros(sizeOfInp(1,1)+2, sizeOfInp(1,2)+2);
+image = zeros(sizeOfInp(1,1)+4, sizeOfInp(1,2)+4);
 sizeOfIm = size(image);
-for i = 2:sizeOfIm(1,1)-1
-    for j = 2:sizeOfIm(1,2)-1
-        image(i,j)=input(i-1,j-1);
+for i = 3:sizeOfIm(1,1)-2
+    for j = 3:sizeOfIm(1,2)-2
+        image(i,j)=input(i-2,j-2);
     end
 end
 end

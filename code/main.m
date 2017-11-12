@@ -35,7 +35,9 @@ end
 
 %Geometrische Transformation
 
-%Connected Component Labeling 
+%Connected Component Labeling
+    %returns a matrix with one character per (3rd) dimension
+    %imageLet = labeling(imageTransf);
 
 %Thinning
 %currently not required
