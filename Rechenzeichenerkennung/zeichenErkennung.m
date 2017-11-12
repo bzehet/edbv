@@ -2,27 +2,79 @@
 %it iterates over the pictures and crops them. Then it checks which symbol
 %(+,-,*,/,(,)) it is. At the end it returns a char-array in the form of
 %{'-','?','+','?'}
-function [result]=test()
-    pic = imread('Mal.png');
-    pic = imcomplement(pic);
+%Might work better with skeletonized pictures.
+%Might work better with hough transform (especially with the brackets)
+
+
+function [result]=zeichenErkennung(inputPics)
+    %result=test()
+    result=zeichnErkennungAlg(inputPics,0);
+end
+
+function[result]= test()
+
+    var loadFilesFlag=1;
+    result='';
+    
+    files={'resized/bracketOpen.png','resized/divide.png','resized/minus.png','resized/plus.png','resized/mal.png'}
+    
+    result=zeichenErkennungAlg(files,1);
+    
+end
+
+
+function [result]=zeichenErkennungAlg(inputPics,justFileNames)
     %imshow(pic);
     %pause;
-    pic=pic(:, :, 1);
+    
     %imshow(pic);
     %pic
     %pause;
-    pic=getSymbolPortionOfBWpic(pic);
-    imshow(pic);
-    plus=isAPlus(pic)
-    minus=isAMinus(pic)
-    divide=isADivide(pic)
-    mult=isAMult(pic)
-    bracketOpen=isABracket(pic)
-    bracketClose=isABracket(fliplr(pic))
+    amount=size(inputPics,1);
+    if(justFileNames) 
+        amount=size(inputPics,2);
+    end
     
-    result=1;
-    pause;
-    imshow(pic);
+    result=zeros(1,amount);
+    for i=1:amount
+        if(justFileNames)
+            pic=imread(char(inputPics(i)));
+            pic=imcomplement(pic);
+        else
+            pic=inputPics(i);
+        end
+        pic=im2bw(pic,0.5);
+        imshow(pic);
+        %crops image to relevant part
+        pic=getSymbolPortionOfBWpic(pic);
+        
+        if(isAPlus(pic))
+            result(i)='+';
+        else
+            if(isAMinus(pic))
+                result(i)='-';
+            else
+                if(isADivide(pic))
+                    result(i)='/';
+                else
+                    if(isAMult(pic))
+                        result(i)='*';
+                    else
+                        if(isABracket(pic))
+                            result(i)='(';
+                        else
+                            if(isABracket(fliplr(pic)))
+                                result(i)=')';
+                            else
+                                result(i)='?';
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    result=char(result);
 end
 
 
@@ -43,7 +95,7 @@ function[isPlus]=isAPlus(input)
     
     tall=size(input,1);
     long=size(input,2);
-    percentageBlack=sum(sum(input))/255/(tall*long);
+    percentageBlack=sum(sum(input))/max(max(input))/(tall*long);
     if(percentageBlack >0.5)
         isPlus=0;
     else
@@ -71,7 +123,7 @@ function[isMinus]=isAMinus(input)
     %it's a minus if it's long (longer than tall) and mostly black.
     tall=size(input,1);
     long=size(input,2);
-    percentageBlack=sum(sum(input))/255/(tall*long);
+    percentageBlack=sum(sum(input))/max(max(input))/(tall*long);
     isMinus=0;
     if(percentageBlack>0.4 && long>tall*2)
         isMinus=1;
@@ -96,11 +148,11 @@ function[isDivide]=isADivide(input)
     tall=size(input,1);
     long=size(input,2);
     sumBlack=sum(sum(input));
-    percentageBlack=sumBlack/255/(tall*long);
+    percentageBlack=sumBlack/max(max(input))/(tall*long);
     avgtall=sumBlack/tall;
     avgLong=sumBlack/long;
     
-    if(percentageBlack>0.4)
+    if(percentageBlack>0.7)
         isDivide=0;
     else
           checkSide = sum(input, 2);
@@ -127,8 +179,8 @@ function[isMult]=isAMult(input)
     tall=size(input,1);
     long=size(input,2);
     sumBlack=sum(sum(input));
-    percentageBlack=sumBlack/255/(tall*long);
-    if(percentageBlack<0.65)
+    percentageBlack=sumBlack/max(max(input))/(tall*long);
+    if(percentageBlack<0.6)
         isMult=0;
     else
         
@@ -136,17 +188,25 @@ function[isMult]=isAMult(input)
 end
 
 function[isBracket]=isABracket(input)
-%bad, real bad
+    %bad: it just looks at the different parts of the picture and
+    %determines in which one is more color.
+
     isBracket=1;
-    horizProj=sum(input,1);
-    half=size(horizProj,2)/2;
+    
+    horizProj=rot90(sum(input,1));
+    half=size(horizProj,1)/2;
     firstPortion=sum(horizProj(1:floor(half)));
     secondPortion=sum(horizProj(ceil(half):floor(half*2)));
-    if(firstPortion<secondPortion*1.3)
+    if(firstPortion>secondPortion*0.7)
         isBracket=0;
     end
-    
-    verticProj=rot90(sum(input));
-    
-    
+    vertProj=sum(input,2);
+    %upper and lower quarter of pic have to be greater than middle
+    quarter=size(vertProj,1)/5;
+    firstPortion=sum(vertProj(1:floor(quarter)));
+    secondPortion=sum(vertProj(ceil(quarter):floor(quarter*3)));
+    thirdPortion=sum(vertProj(ceil(quarter*3):floor(quarter*4)));
+    if(firstPortion+thirdPortion<secondPortion)
+        isBracket=0;
+    end
 end
