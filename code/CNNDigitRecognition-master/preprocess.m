@@ -1,7 +1,8 @@
 function C=preprocess(inputImage)
-	var1=imread(inputImage);
-	var2=rgb2gray(var1);
-	var3=imcrop(var2);
+	%var1=imread(inputImage);
+    var1=inputImage;
+	var3=rgb2gray(var1);
+	%var3=imcrop(var2);
 	B=imresize(var3, [28 28]);
 	B=double(B)/255;
 	B=double(ones(28, 28)-B);
@@ -9,7 +10,7 @@ function C=preprocess(inputImage)
 	for j=1:50
 		C(:, :, j)=B(:, :)';
 	end
-	TestImage(C);
+	%TestImage(C);
 	 function X = TestImage(X)
         colormap gray;
 		imagesc(X(:, :, 46)');

@@ -9,8 +9,7 @@
 %Technische Universität Wien
 %
 
-%load dataset and path for digit recognition
-addpath('CNNDigitRecognition-master\');
+%load dataset for digit recognition
 load('CNNDigitRecognition-master/hundredEpochs.mat');
 
 %load solutions for testimages
@@ -36,10 +35,9 @@ image = imread(strcat('testset/', num2str(imageNumber), '.jpg'));
 
 %Digit Recognition
 %load test values for digit recognition:
-%symbols and imageNumber should be calculated by previous methods
 symbols = ['(', ' ', '+', ' ', ')', '*', ' '];
-imageNumer = {imread('testset/21a.jpg'), imread('testset/21b.jpg'), imread('testset/21c.jpg')};
-formula = calculateFormula(cnn, imageNumer, symbols);
+thinnedImages = [imread('testset/21a.jpg'), imread('testset/21b.jpg'), imread('testset/21c.jpg')];
+formula = calculateFormula(thinnedImages, symbols);
 
 %the formula will be calculated by previous methods
 %formula= '(4+2)*3';
