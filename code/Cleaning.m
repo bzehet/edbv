@@ -1,4 +1,5 @@
 function[result]=cleaning(input)
+input = changeSize(input);
 sizeOf = size(input);
 q = zeros(2,0);
 %erste Spalte/letzte Spalte
@@ -50,5 +51,16 @@ result = zeros(2, sizeOf(1,2)-1);
         result(1,i)=queue(1,i+1);
         result(2,i)=queue(2,i+1);
     end
+end
+
+function [image] = changeSize(input)
+sizeOfInp = size(input);
+image = zeros(sizeOfInp(1,1)+4, sizeOfInp(1,2)+4);
+sizeOfIm = size(image);
+for i = 3:sizeOfIm(1,1)-2
+    for j = 3:sizeOfIm(1,2)-2
+        image(i,j)=input(i-2,j-2);
+    end
+end
 end
 

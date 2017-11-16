@@ -5,7 +5,6 @@ function [result] = labeling(input)
 b_image=1-input;
 
 %CLEANING
-b_image = changeSize(b_image);
 b_image = cleaning(b_image);
 %CLEANING /END
 %CONNECTED COMPONENT LABELING
@@ -66,13 +65,4 @@ for i=1:newNum
 end
 end
 
-function [image] = changeSize(input)
-sizeOfInp = size(input);
-image = zeros(sizeOfInp(1,1)+4, sizeOfInp(1,2)+4);
-sizeOfIm = size(image);
-for i = 3:sizeOfIm(1,1)-2
-    for j = 3:sizeOfIm(1,2)-2
-        image(i,j)=input(i-2,j-2);
-    end
-end
-end
+
