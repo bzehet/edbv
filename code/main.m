@@ -17,7 +17,7 @@ load('CNNDigitRecognition-master/hundredEpochs.mat');
 filename = 'testset/image_numbers.xlsx';
 solution = xlsread(filename,'C3:C102');
 
-imageNumber = 35;
+imageNumber = 20;
 
 image = imread(strcat('testset/', num2str(imageNumber), '.jpg'));
 
@@ -28,12 +28,13 @@ imshow(imageBin);
 %Projektionen
 
 %Geometrische Transformation
-imageRot = imalign(1- imageBin, -5);
+imageRot = imalign(1- imageBin, 5);
 imshow(imageRot);
 
 %Connected Component Labeling
     %returns a matrix with one character per (3rd) dimension
-    %imageLet = labeling(imageTransf);
+    imageLet = labeling(1 - imageRot);
+    
 
 %Thinning
 %currently not required
