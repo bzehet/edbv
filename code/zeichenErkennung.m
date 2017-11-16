@@ -8,7 +8,7 @@
 
 function [result]=zeichenErkennung(inputPics)
     %result=test()
-    result=zeichnErkennungAlg(inputPics,0);
+    result=zeichenErkennungAlg(inputPics,0);
 end
 
 function[result]= test()
@@ -30,7 +30,7 @@ function [result]=zeichenErkennungAlg(inputPics,justFileNames)
     %imshow(pic);
     %pic
     %pause;
-    amount=size(inputPics,1);
+    amount=size(inputPics,3);
     if(justFileNames) 
         amount=size(inputPics,2);
     end
@@ -41,7 +41,7 @@ function [result]=zeichenErkennungAlg(inputPics,justFileNames)
             pic=imread(char(inputPics(i)));
             pic=imcomplement(pic);
         else
-            pic=inputPics(i);
+            pic=inputPics(:,:,i);
         end
         pic=im2bw(pic,0.5);
         imshow(pic);
