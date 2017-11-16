@@ -17,17 +17,19 @@ load('CNNDigitRecognition-master/hundredEpochs.mat');
 filename = 'testset/image_numbers.xlsx';
 solution = xlsread(filename,'C3:C102');
 
-imageNumber = 38;
+imageNumber = 20;
 
 image = imread(strcat('testset/', num2str(imageNumber), '.jpg'));
 
 
 %Threshold nach Otsu
 imageBin = otsu(image);
-
+imshow(imageBin);
 %Projektionen
 
 %Geometrische Transformation
+imageRot = imalign(1- imageBin, 5);
+imshow(imageRot);
 
 %Connected Component Labeling 
 
