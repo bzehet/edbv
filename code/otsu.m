@@ -12,13 +12,6 @@ I2  = imcomplement(rgb2gray(I1)); % invertieren und in grauwerte umwandeln
 
 background = imopen(I2,strel('disk',15));%approzimiert den hintergrung 
 
-% Display the Background Approximation as a Surface
-
-figure
-surf(double(background(1:8:end,1:8:end))),zlim([0 255]);
-ax = gca;
-ax.YDir = 'reverse';
-
 I3 = I2 - background; % hintergrund vom grauwertbild abziehen
 %imshow(I3)
 
