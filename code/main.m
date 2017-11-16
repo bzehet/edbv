@@ -17,7 +17,7 @@ load('CNNDigitRecognition-master/hundredEpochs.mat');
 filename = 'testset/image_numbers.xlsx';
 solution = xlsread(filename,'C3:C102');
 
-imageNumber = 68;
+imageNumber = 60;
 
 image = imread(strcat('testset/', num2str(imageNumber), '.jpg'));
 
@@ -35,7 +35,13 @@ imshow(imageRot);
 
 %Connected Component Labeling
     %returns a matrix with one character per (3rd) dimension
-    imageLet = labeling(1 - imageRot);
+    imageLet = labeling(imageRot);
+    sizeOf = size(imageLet);
+    
+    for i=1:sizeOf(1,3)
+        imshow(imageLet(:,:,i));
+    end
+    
     
     %imageFin = zeichenErkennung(imageLet);
     

@@ -2,14 +2,10 @@
 %Connected Component Labeling
 %
 function [result] = labeling(input)
-b_image=1-input;
-
-%CLEANING
-b_image = cleaning(b_image);
-%CLEANING /END
+%input background must be black
 %CONNECTED COMPONENT LABELING
-sizeOf=size(b_image);
-[labels, num] = bwlabel(b_image,8);
+sizeOf=size(input);
+[labels, num] = bwlabel(input,8);
 %CONNECTED COMPONENT LABELING /END
 
 check = zeros(num,sizeOf(1,2));
