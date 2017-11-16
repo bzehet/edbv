@@ -1,21 +1,59 @@
-image = imread('bild1.JPG');
-% b_image = imcomplement(im2bw(image,0.2));
-b_image = 1-im2bw(image,0.2);
-imshow(b_image)
+%Formelerkennung
+%
+%Bernhard Martin Aschl
+%Pascal Kawasser
+%Oskar Perl
+%Viktoria Pundy
+%Björn Zehetbauer
+%
+%Technische Universität Wien
+%
 
-b_image_maj = bwmorph(b_image,'majority',Inf);
-% figure
-% imshow(b_image_maj)
+filename = 'testset/image_numbers.xlsx';
+solution = xlsread(filename,'C3:C102');
 
-b_image_thin = bwmorph(b_image_maj,'thin',Inf);
-figure
-imshow(b_image_thin)
+imageNumber = [20 21 22];
+imageSize = size(imageNumber,2);
 
-%verticalProfile = sum(b_image_thin, 2);
-horizontalProfile = sum(b_image_thin, 1);
+paths = repmat({' '},1,imageSize);
+images = repmat({' '},1,imageSize);
 
-figure
-plot(1:size(b_image_thin,2), horizontalProfile);
+if(size(imageNumber,2) < 2)
+    paths = strcat('testset/', num2str(imageNumber), '.jpg');
+    images = {imread(paths)};
+else
+    for i=1:imageSize
+    paths(i) = cellstr(strcat('testset/', num2str(imageNumber(i)), '.jpg'));
+    images(i) = {imread(paths{i})};
+    end
+end
 
-% figure
-% plot(verticalProfile, 1:size(b_image_thin,1));
+%Threshold nach Otsu
+%imageBin = otsu(image);
+
+%Projektionen
+
+%Geometrische Transformation
+
+%Connected Component Labeling 
+
+%Thinning
+%currently not required
+
+%the formula will be calculated by previous methods
+formulas= {'7+4' '(4+2)*3' '(80/2)-11'};
+
+result = calculate(formulas);
+for i=1:size(result,2)
+fprintf('Formel: %s\n', formulas{i});
+fprintf('Ergebnis: %d\n', result(i));
+sol = solution(imageNumber(i)+1);
+fprintf('Lösung: %d\n', sol);
+if(result(i) == sol)
+    fprintf('Das Ergebnis ist korrekt!\n\n');
+else
+    fprintf('Das Ergebnis ist nicht korrekt!\n\n');
+end
+end
+
+
