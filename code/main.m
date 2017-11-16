@@ -17,7 +17,7 @@ load('CNNDigitRecognition-master/hundredEpochs.mat');
 filename = 'testset/image_numbers.xlsx';
 solution = xlsread(filename,'C3:C102');
 
-imageNumber = 48;
+imageNumber = 68;
 
 image = imread(strcat('testset/', num2str(imageNumber), '.jpg'));
 
@@ -26,7 +26,7 @@ image = imread(strcat('testset/', num2str(imageNumber), '.jpg'));
 imageBin = otsu(image);
 imshow(imageBin);
 imageCl = cleaning(imageBin);
-imshow(imageCL);
+imshow(imageCl);
 %Projektionen
 
 %Geometrische Transformation

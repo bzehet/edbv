@@ -1,4 +1,5 @@
 function[result]=cleaning(input)
+input = 1-input;
 input = changeSize(input);
 sizeOf = size(input);
 q = zeros(2,0);
@@ -29,7 +30,7 @@ while (sizeOfQueue(1,2)~=0)
     end
     sizeOfQueue = size(q);
 end
-result = input;
+result = 1-input;
 end
 
 function[result]=expandQueue(queue, r,c)
