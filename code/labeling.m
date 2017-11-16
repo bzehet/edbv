@@ -22,7 +22,6 @@ end
 
 toMerge=zeros(num,2);
 k = 1;
-newNum=num;
 for i=1:num
     [~,c1]=find(labels==i);
     span1=max(c1)-min(c1)+1;
@@ -41,7 +40,6 @@ for i=1:num
                toMerge(k,1)=i;
                toMerge(k,2)=j;
                k=k+1;
-               newNum= newNum-1;
                break;
         end
     end
@@ -53,7 +51,7 @@ end
 
 
 result=zeros(sizeOf(1,1),sizeOf(1,2),num-1);
-for i=1:newNum
+for i=1:num
     helper = zeros(sizeOf(1,1),sizeOf(1,2));
     logic(:,:)=(labels(:,:)==i);
     helper(logic==1)=i;
