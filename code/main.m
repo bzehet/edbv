@@ -17,7 +17,7 @@ load('CNNDigitRecognition-master/hundredEpochs.mat');
 filename = 'testset/image_numbers.xlsx';
 solution = xlsread(filename,'C3:C102');
 
-imageNumber = 60;
+imageNumber = 34;
 
 image = imread(strcat('testset/', num2str(imageNumber), '.jpg'));
 
@@ -25,7 +25,7 @@ image = imread(strcat('testset/', num2str(imageNumber), '.jpg'));
 %Threshold nach Otsu
 imageBin = otsu(image);
 imshow(imageBin);
-imageCl = cleaning(imageBin);
+imageCl = Cleaning(imageBin);
 imshow(imageCl);
 %Projektionen
 
@@ -43,7 +43,7 @@ imshow(imageRot);
     end
     
     
-    %imageFin = zeichenErkennung(imageLet);
+zeichenArray = zeichenErkennung(imageLet);
     
 
 %Thinning
