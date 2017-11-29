@@ -4,13 +4,12 @@
 function [result] = labeling(input)
 %input background must be black
 %CONNECTED COMPONENT LABELING
-sizeOf=size(input);
 [labels, num] = bwlabel(input,8);
 %CONNECTED COMPONENT LABELING /END
 
-check = zeros(num,sizeOf(1,2));
-for i=1:sizeOf(1,1)
-    for j=1:sizeOf(1,2)
+check = zeros(num,size(input,2));
+for i=1:size(input,1)
+    for j=1:size(input,2)
         for k=1:num
             if(labels(i,j)==k)
                 check(k,j)=1;
@@ -50,12 +49,10 @@ for i=1:k-1
 end
 
 
-result=zeros(sizeOf(1,1),sizeOf(1,2),num-1);
+result=zeros(size(input,1),size(input,2),num);
 for i=1:num
-    helper = zeros(sizeOf(1,1),sizeOf(1,2));
     logic(:,:)=(labels(:,:)==i);
-    helper(logic==1)=i;
-    result(:,:,i)=helper;
+    result(:,:,i)=logic;
 end
 end
 
