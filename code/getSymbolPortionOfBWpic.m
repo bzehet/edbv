@@ -1,0 +1,11 @@
+function[symbolPic]=getSymbolPortionOfBWpic(input)
+    indSubPic=find(input);
+    widPic=size(input,2);
+    heiPic=size(input,1);
+    xmin=floor(min(indSubPic)/heiPic)+1;
+    ymin=min(mod(indSubPic,heiPic));
+    xmax=floor(max(indSubPic)/heiPic)+1;
+    ymax=max(mod(indSubPic,heiPic));
+    subPicRect=[xmin,ymin,xmax-xmin,ymax-ymin];
+    symbolPic=imcrop(input,subPicRect);
+end
