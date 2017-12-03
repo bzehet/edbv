@@ -17,7 +17,7 @@ load('CNNDigitRecognition-master/hundredEpochs.mat');
 filename = 'testset/image_numbers.xlsx';
 solution_Result = xlsread(filename,'C3:C102');
 [num, solution_Formula, raw] = xlsread(filename, 'B3:B102');
-imageNumber = 30;
+imageNumber = 26;
 
 image = imread(strcat('testset/', num2str(imageNumber), '.jpg'));
 
@@ -35,9 +35,12 @@ imshow(imageRot);
 
 %Connected Component Labeling
     %returns a matrix with one character per (3rd) dimension
-    imageLet = labeling(imageRot);
+    [imageLet, bool] = labeling(imageRot);
+    if (~bool)
+        [imageLet, ~]=labeling(imrotate(imageRot,180));
+    end
     sizeOf = size(imageLet);
-    
+
     for i=1:sizeOf(1,3)
         imshow(imageLet(:,:,i));
     end
