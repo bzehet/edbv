@@ -18,7 +18,7 @@ filename = 'testset/image_numbers.xlsx';
 
 solution_Result = xlsread(filename,'C3:C102');
 [num, solution_Formula, raw] = xlsread(filename, 'B3:B102');
-imageNumber = 30;
+imageNumber = 55;
 
 
 image = imread(strcat('testset/', num2str(imageNumber), '.jpg'));
@@ -52,14 +52,14 @@ imshow(imageRot);
     end
     
     
-symbols = symbolRecognition(imageLet);
+symbols = symbolRecognition(imageLet(:,:,1:end-1));
     
 
 %Thinning
 %currently not required
 
 %Digit Recognition
-[formula, digits] = calculateFormula(cnn, imageLet, symbols);
+[formula, digits] = calculateFormula(cnn, imageLet(:,:,1:end-1), symbols);
 
 %only for digit testing:
 fprintf('Formel Vorlage: %s\n', solution_Formula{imageNumber+1});
