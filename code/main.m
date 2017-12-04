@@ -15,9 +15,11 @@ load('CNNDigitRecognition-master/hundredEpochs.mat');
 
 %load solutions for testimages
 filename = 'testset/image_numbers.xlsx';
+
 solution_Result = xlsread(filename,'C3:C102');
 [num, solution_Formula, raw] = xlsread(filename, 'B3:B102');
-imageNumber = 26;
+imageNumber = 30;
+
 
 image = imread(strcat('testset/', num2str(imageNumber), '.jpg'));
 
@@ -40,28 +42,31 @@ imshow(imageRot);
         [imageLet, ~]=labeling(imrotate(imageRot,180));
     end
     sizeOf = size(imageLet);
-
+    
+    if(sizeOf > 20)
+        error('Too many components');
+    end
+    
     for i=1:sizeOf(1,3)
         imshow(imageLet(:,:,i));
     end
     
     
-    %imageFin = zeichenErkennung(imageLet);
+symbols = symbolRecognition(imageLet);
     
 
 %Thinning
 %currently not required
 
 %Digit Recognition
-%load test values for digit recognition:
-%symbols and imageNumber should be calculated by previous methods
-symbols = ['(', ' ', '+', ' ', ')', '*', ' ']; %symbols for image 21.jpg
-formula = calculateFormula(cnn, imageLet, symbols);
+[formula, digits] = calculateFormula(cnn, imageLet, symbols);
 
 %only for digit testing:
 fprintf('Formel Vorlage: %s\n', solution_Formula{imageNumber+1});
-fprintf('Berechnet: ');
-disp(formula);
+fprintf('Formel Berechn: %s\n\n', formula);
+fprintf('Struktur Berec: %s\n', symbols(1:end-1));
+fprintf('Zahlen Berechn: ');
+disp(digits);
 
 %print the result, disabled for test purpose
 % result = calculate(formula);
