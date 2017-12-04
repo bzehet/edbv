@@ -43,7 +43,7 @@ imshow(imageRot);
     end
     sizeOf = size(imageLet);
     
-    if(sizeOf > 20)
+    if(sizeOf > 30)
         error('Too many components');
     end
     
