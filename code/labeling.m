@@ -7,11 +7,10 @@
 function [result, bool] = labeling(input)
 
 %CONNECTED COMPONENT LABELING
-%[labels, num] = bwlabel(input,8);
 [labels, num] = C_C_L(input);
 %CONNECTED COMPONENT LABELING /END
 
-%%Method to combine the lines of equals sign:
+%Method to combine the lines of equals sign:
 %saving column numbers of each label (stored per column)
 check = zeros(num,size(input,2));
 for j=1:size(input,2)
@@ -22,7 +21,7 @@ for j=1:size(input,2)
     end
 end
 
-%%Merging all labels which have the same column numbers to more than 60%:
+%Merging all labels which have the same column numbers to more than 60%:
 toMerge=zeros(num,2);
 k = 0;
 %compare every label
@@ -34,7 +33,7 @@ for i=1:num
         continue;
     end
     for j=(i+1):num
-        %calculate range of first label
+        %calculate range of second label
         [~,c2]=find(labels==j);
         span2=max(c2)-min(c2)+1;
         if (span2<5)
@@ -60,58 +59,61 @@ result=zeros(size(input,1),size(input,2),num);
 for i=1:num
     result(:,:,i)=(labels(:,:)==i);
 end
-bool = degreeCheck(result, num);
+%checking if image needs to be rotated by 180 degrees
+bool = rotationCheck(result, num);
 end
 
-function [finImage, num]=C_C_L(image)
-image = changeSize(image);
-checked = zeros(size(image,1),size(image,2));
+%Starts labeling process, finds not yet checked pixels and calls
+%recursiveFindNeighbours
+function [result, num]=C_C_L(image)
+image = -image;
+%image is expanded by four rows/columns for labeling process
+image = expandImage(image);
 label = 0;
-labeledImage = zeros(size(image,1),size(image,2));
 for j=2:size(image,2)-1
-   for i=2:size(image,1)-1
-       if (checked(i,j)==0 && image(i,j)==1)
-          label = label + 1;
-          [labeledImage, checked]=recursiveLabel(image, labeledImage, checked, label, i, j);
-       elseif (checked(i,j)==0 && image(i,j)==0)
-          checked(i,j)=1;     
-       end   
-   end
+    for i=2:size(image,1)-1
+        %checks if pixel is white (foreground) and has not been checked
+        %yet
+        if (image(i,j)==-1)
+            label = label + 1;
+            image = recursiveFindNeighbours(image, label, i, j);
+        end
+    end
 end
-finImage=labeledImage(2:size(image,1)-1,2:size(image,2)-1);
+%result is image without additional rows/columns
+result=image(2:end-1,2:end-1);
 num = label;
 end
 
-function [im, ch]=recursiveLabel(image, lImage, checked, label, r, c)
-checked(r,c)=1;
-lImage(r,c)=label;
-for k = -1:1
-    for l = -1:1
-        if (checked(k+r,l+c)==0 && image(k+r,l+c)==1)
-            [lImage, checked]=recursiveLabel(image, lImage,checked,label,r+k,l+c);
-        end
-        if (checked(k+r,l+c)==0 && image(k+r,l+c)==0)
-            checked(k+r,l+c)=1;
+%Labels given pixel and checks if neighbours of it are part of component
+function[result]=recursiveFindNeighbours(image, label, r, c)
+image(r,c)=label;
+for x=-1:1
+    for y =-1:1
+        %if neighbour pixel is also white and has not been checked, method
+        %is called with new pixel
+        if (image(r+x,c+y)==-1)
+            image = recursiveFindNeighbours(image, label, r+x,c+y);
         end
     end
 end
-im = lImage;
-ch = checked;
+result = image;
 end
 
-function [image] = changeSize(input)
+%Expands image by a one pixel black frame. Necessary for recursiveFindNeighbours
+%method
+function [image] = expandImage(input)
 image = zeros(size(input,1)+2, size(input,2)+2);
-for i=1:size(input,1)
-    for j=1:size(input,2)
-        image(i+1,j+1)=input(i,j);
-    end
-end
+image(2:end-1,2:end-1)=input(:,:);
 end
 
-function [r] = degreeCheck(input, num)
+%Checks if image needs to be rotated by 180°
+function [r] = rotationCheck(input, num)
 r = true;
-for i = 1:num
-    if (all(1-(input(:,:,i))))
+for i = 1:num %every picture in the array is checked
+    if (all(1-(input(:,:,i)))) 
+        %if equalssign is on the left half of formula, image must be
+        %rotated
         if (i<(num/2))
             r = false;
         end
