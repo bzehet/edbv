@@ -4,7 +4,7 @@
 %Function gets a binary picture where the background is black and the signs
 %are white. Returns an array of pictures where each single letter is stored in one
 %picture. 
-function [result, bool] = labeling(input)
+function [result, boolRotate] = labeling(input)
 
 %CONNECTED COMPONENT LABELING
 [labels, num] = C_C_L(input);
@@ -60,7 +60,7 @@ for i=1:num
     result(:,:,i)=(labels(:,:)==i);
 end
 %checking if image needs to be rotated by 180 degrees
-bool = rotationCheck(result, num);
+boolRotate = rotationCheck(result, num);
 end
 
 %Starts labeling process, finds not yet checked pixels and calls
@@ -121,5 +121,3 @@ for i = 1:num %every picture in the array is checked
     end
 end
 end
-
-
