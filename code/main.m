@@ -9,18 +9,26 @@
 %Technische Universität Wien
 %
 
+function main()
+dataset = 2;
+dataset = gui;
+
+disp(dataset);
 %load dataset and path for digit recognition
 addpath('CNNDigitRecognition-master\');
 load('CNNDigitRecognition-master/hundredEpochs.mat');
 
 %load solutions for testimages
+%[imageName, imagePath] = uigetfile({'*.jpg';'*.jpeg';'*.png'}, 'Select the picture','testset/');
 filename = 'testset/image_numbers.xlsx';
 
+if(dataset)
 solution_Result = xlsread(filename,'C3:C102');
 [num, solution_Formula, raw] = xlsread(filename, 'B3:B102');
-imageNumber = 62;
+imageNumber = strtok(imageName, '.');
+end
 
-image = imread(strcat('testset/', num2str(imageNumber), '.jpg'));
+image = imread(strcat(imagePath, imageName));
 
 %Threshold nach Otsu
 imageBin = otsu(image);
@@ -50,12 +58,9 @@ for i=1:sizeOf(1,3)
 end
     
 
-
+%Symbol Recognition
 symbols = symbolRecognition(imageLet(:,:,1:end-1));
     
-
-%Thinning
-%currently not required
 
 %Digit Recognition
 [formula, digits] = calculateFormula(cnn, imageLet(:,:,1:end-1), symbols);
@@ -78,13 +83,10 @@ disp(digits);
 %     fprintf('Das Ergebnis ist nicht korrekt!\n\n');
 % end
 
+end
+
+function imageButton_callback(src, event)
+    [imageName, imagePath] = uigetfile({'*.jpg';'*.jpeg';'*.png'}, 'Select the picture','testset/');
+end
 
 
-%Methodenpipeline:
-% - Otsu
-% - Cleaning
-% - Rotation (Projektion)
-% - Labeling
-% - Rechenzeichenerkennung (Projektion)
-% - Digit Recognition
-% - calculation
