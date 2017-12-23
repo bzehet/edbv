@@ -13,7 +13,7 @@ function varargout = gui(varargin)
 %      existing singleton*.  Starting from the left, property value pairs are
 %      applied to the GUI before gui_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to gui_qingFcn via varargin.
+%      stop.  All inputs are passed to gui_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 19-Dec-2017 22:56:29
+% Last Modified by GUIDE v2.5 23-Dec-2017 11:06:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -54,12 +54,14 @@ function gui_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for gui
 handles.output = hObject;
+global imageName;
+imageName = '';
 
 % Update handles structure
 guidata(hObject, handles);
 
 % UIWAIT makes gui wait for user response (see UIRESUME)
-uiwait(handles.figure1);
+ uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
@@ -70,43 +72,36 @@ function varargout = gui_OutputFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
-varargout{1} = get(handles.checkboxDataset, 'value');
+global imageName;
+global imagePath;
+varargout{1} = imageName;
+varargout{2} = imagePath;
+varargout{3} = get(handles.checkboxDataset, 'Value');
+varargout{4} = get(handles.editTxtFld, 'string');
+delete(handles.figure1);
 
 
-% --- Executes on button press in pushbuttonImage.
-function pushbuttonImage_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbuttonImage (see GCBO)
+% --- Executes on button press in pushbuttonCalc.
+function pushbuttonCalc_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbuttonCalc (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+figure1_CloseRequestFcn(hObject, eventdata, handles);
+
+
+
+function editTxtFld_Callback(hObject, eventdata, handles)
+% hObject    handle to editTxtFld (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-[imageName, imagePath] = uigetfile({'*.jpg';'*.jpeg';'*.png'}, 'Select the picture','testset/')
-imshow(imread(strcat(imagePath, imageName)));
-
-
-
-% --- Executes on button press in checkboxDataset.
-function checkboxDataset_Callback(hObject, eventdata, handles)
-% hObject    handle to checkboxDataset (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of checkboxDataset
-dataset = get(hObject, 'Value')
-
-
-
-function editInputFormula_Callback(hObject, eventdata, handles)
-% hObject    handle to editInputFormula (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of editInputFormula as text
-%        str2double(get(hObject,'String')) returns contents of editInputFormula as a double
+% Hints: get(hObject,'String') returns contents of editTxtFld as text
+%        str2double(get(hObject,'String')) returns contents of editTxtFld as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function editInputFormula_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to editInputFormula (see GCBO)
+function editTxtFld_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to editTxtFld (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -117,21 +112,37 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in pushbuttonCalculate.
-function pushbuttonCalculate_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbuttonCalculate (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
 % --- Executes when user attempts to close figure1.
 function figure1_CloseRequestFcn(hObject, eventdata, handles)
 % hObject    handle to figure1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-if isequal(get(hObject, 'waitstatus'), 'waiting')
-    uiresume(hObject);
+% Hint: delete(hObject) closes the figure
+global imageName;
+if(isempty(imageName))
+    warndlg('Bitte ein Bild wählen!');
 else
-    delete(hObject);
+    uiresume();
 end
+
+
+
+% --- Executes on button press in pushbuttonImgSelect.
+function pushbuttonImgSelect_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbuttonImgSelect (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global imageName;
+global imagePath;
+[imageName, imagePath] = uigetfile({'*.jpg';'*.jpeg';'*.png'}, 'Select the picture','testset/');
+imshow(imread(strcat(imagePath, imageName)));
+
+
+% --- Executes on button press in checkboxDataset.
+function checkboxDataset_Callback(hObject, eventdata, handles)
+% hObject    handle to checkboxDataset (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkboxDataset

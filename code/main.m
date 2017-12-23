@@ -10,10 +10,9 @@
 %
 
 function main()
-dataset = 2;
-dataset = gui;
 
-disp(dataset);
+[imageName, imagePath, dataset, inputFormula] = gui;
+
 %load dataset and path for digit recognition
 addpath('CNNDigitRecognition-master\');
 load('CNNDigitRecognition-master/hundredEpochs.mat');
@@ -85,8 +84,5 @@ disp(digits);
 
 end
 
-function imageButton_callback(src, event)
-    [imageName, imagePath] = uigetfile({'*.jpg';'*.jpeg';'*.png'}, 'Select the picture','testset/');
-end
 
 
