@@ -11,6 +11,7 @@
 
 function main()
 
+%load gui for user input
 [imageName, imagePath, dataset, inputFormula] = gui;
 
 %load dataset and path for digit recognition
@@ -18,70 +19,76 @@ addpath('CNNDigitRecognition-master\');
 load('CNNDigitRecognition-master/hundredEpochs.mat');
 
 %load solutions for testimages
-%[imageName, imagePath] = uigetfile({'*.jpg';'*.jpeg';'*.png'}, 'Select the picture','testset/');
-filename = 'testset/image_numbers.xlsx';
+solutionFilename = 'testset/image_numbers.xlsx';
 
+%load solutions if the provided dataset is used
 if(dataset)
-solution_Result = xlsread(filename,'C3:C102');
-[num, solution_Formula, raw] = xlsread(filename, 'B3:B102');
-imageNumber = strtok(imageName, '.');
+[num, solution_Formula, raw] = xlsread(solutionFilename, 'B3:C102');
+imageNumber = str2num(strtok(imageName, '.')); %#ok<ST2NM>
+    if(isempty(imageNumber))
+       error('Falls ein eigener Datensatz verwendet wird darf die Checkbox "Datensatz" nicht markiert werden');
+    end
 end
 
-image = imread(strcat(imagePath, imageName));
+%load input
+inputImage = imread(strcat(imagePath, imageName));
 
 %Threshold nach Otsu
-imageBin = otsu(image);
-imshow(imageBin);
-imageCl = cleaning(imageBin);
-imshow(imageCl);
+imageOtsu = otsu(inputImage);
+imshow(imageOtsu);
+imageCleaning = cleaning(imageOtsu);
+imshow(imageCleaning);
 
 %Geometrische Transformation
-imageRot = imalign(1- imageCl, 5);
-imshow(imageRot);
-imageFC = fragmentCleaner(imageRot);
+imageTransformation = imalign(1- imageCleaning, 5);
+imshow(imageTransformation);
+imageFC = fragmentCleaner(imageTransformation);
 imshow(imageFC);
 
 %Connected Component Labeling
-[imageLet, boolRot] = labeling(imageFC);
+[imageLabeling, boolRot] = labeling(imageFC);
 if (~boolRot)
-    [imageLet, ~] = labeling(imrotate(imageFC,180));
+    [imageLabeling, ~] = labeling(imrotate(imageFC,180));
 end
 
-sizeOf = size(imageLet);
+sizeOf = size(imageLabeling);
 if(sizeOf > 30)
     error('Too many components');
 end
     
 for i=1:sizeOf(1,3)
-  imshow(imageLet(:,:,i));
+  imshow(imageLabeling(:,:,i));
 end
     
 
 %Symbol Recognition
-symbols = symbolRecognition(imageLet(:,:,1:end-1));
+symbolsFormula = symbolRecognition(imageLabeling(:,:,1:end-1));
     
 
 %Digit Recognition
-[formula, digits] = calculateFormula(cnn, imageLet(:,:,1:end-1), symbols);
+output_formula = calculateFormula(cnn, imageLabeling(:,:,1:end-1), symbolsFormula);
 
-%only for digit testing:
-fprintf('Formel Vorlage: %s\n', solution_Formula{imageNumber+1});
-fprintf('Formel Berechn: %s\n\n', formula);
-fprintf('Struktur Berec: %s\n', symbols(1:end-1));
-fprintf('Zahlen Berechn: ');
-disp(digits);
+
 %print the result, disabled for test purpose
-% result = calculate(formula);
-% fprintf('Formel: %s\n', formula);
-% fprintf('Ergebnis: %d\n', result);
-% sol = solution(imageNumber + 1);
-% fprintf('Lösung: %d\n', sol);
-% if(result == sol)
-%     fprintf('Das Ergebnis ist korrekt!\n\n');
-% else
-%     fprintf('Das Ergebnis ist nicht korrekt!\n\n');
-% end
-
+try
+    output_result = calculate(output_formula);
+catch
+    output_result = '?';
+end
+if(dataset)
+    output_formula_solution = solution_Formula(imageNumber+1,1);
+    output_result_solution = calculate(output_formula_solution{1});
+else
+    if(isempty(inputFormula))
+        %can't check if result is correct
+    else
+        if(inputFormula(end) == '=')
+           inputFormula = inputFormula(1:end-1); 
+        end
+        output_formula_solution = inputFormula;
+        output_result_solution = calculate(output_formula_solution);
+    end
+end
 end
 
 

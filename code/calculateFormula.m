@@ -1,4 +1,4 @@
-function[res, outputDigit] = calculateFormula(net, images, symbols)
+function[res] = calculateFormula(net, images, symbols)
 %generates a formula for given numbers (images) and symbols
 %images = Array of images, only numbers allowed, size > 1
 %symbols = Array of symbols, size > 2
