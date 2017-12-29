@@ -55,14 +55,14 @@ function [result]=zeichenErkennungAlg(inputPics,justFileNames)
                 result(i)=' ';
             else
                 %crops image to relevant part
-                if(isAMinus(pic))
-                    result(i)='-';
+                if(isAPlus(pic))
+                    result(i)='+';
                 else
-                    if(isADivide(pic))
-                        result(i)='/';
+                    if(isAMinus(pic))
+                        result(i)='-';
                     else
-                        if(isAPlus(pic))
-                            result(i)='+';
+                        if(isADivide(pic))
+                            result(i)='/';
                         else
                             if(isAMult(pic))
                                 result(i)='*';
@@ -112,10 +112,14 @@ function[isPlus]=isAPlus(input)
     imshow(input);
     pixInp=pixelizePic(input, 9,9);
     %corners must not be filled and it mustn't be a 4
-    if(pixInp(9,1)||pixInp(1,9)||pixInp(9,9)||sum(sum(pixInp(1:3,1:3))))
+    if(pixInp(1,1)||pixInp(9,1)||pixInp(1,9)||pixInp(9,9)||pixInp(2,2))
         isPlus=0;
     end
-    
+    checkFor4Pic=pixelizePic(input,2,2);
+    checkFor4Arr=zeros(4);
+    for i=0:4
+        checkFor4Arr(i)=checkFor4Arr
+    end
     percentageBlack=sum(sum(input))/max(max(input))/(tall*long);
     if(percentageBlack >0.5)
         isPlus=0;
