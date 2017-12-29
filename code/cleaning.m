@@ -1,6 +1,7 @@
 %
-%cleaning
+%Cleaning
 %
+%Author: Viktoria Pundy
 %Method gets an input and colours every pixel on the edge with the colour of
 %the background
 %returns picture the size of input

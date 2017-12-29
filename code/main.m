@@ -37,7 +37,8 @@ imshow(imageFC);
 %Connected Component Labeling
 [imageLet, boolRot] = labeling(imageFC);
 if (~boolRot)
-    [imageLet, ~] = labeling(imrotate(imageFC,180));
+    imageFC = imrotate(imageFC,180);
+    [imageLet, ~] = labeling(imageFC);
 end
 
 sizeOf = size(imageLet);
@@ -45,11 +46,8 @@ if(sizeOf > 30)
     error('Too many components');
 end
     
-for i=1:sizeOf(1,3)
-  imshow(imageLet(:,:,i));
-end
-    
-
+outputLabeling = labelImage(imageFC, imageLet);
+imshow(outputLabeling);
 
 symbols = symbolRecognition(imageLet(:,:,1:end-1));
     

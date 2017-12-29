@@ -1,6 +1,7 @@
 %
 %Connected Component Labeling
 %
+%Authors: Pascal Kawasser, Viktoria Pundy
 %Function gets a binary picture where the background is black and the signs
 %are white. Returns an array of pictures where each single letter is stored in one
 %picture. 
