@@ -1,5 +1,6 @@
 function[res] = calculateFormula(net, images, symbols)
 %generates a formula for given numbers (images) and symbols
+%Author: Pascal Kawasser
 %images = Array of images, only numbers allowed, size > 1
 %symbols = Array of symbols, size > 2
 %Example: (4+2)*3

@@ -1,18 +1,22 @@
-%Formelerkennung
+% Formelerkennung
+% Author: Pascal Kawasser
 %
-%Bernhard Martin Aschl
-%Pascal Kawasser
-%Oskar Perl
-%Viktoria Pundy
-%Björn Zehetbauer
+% Bernhard Martin Aschl
+% Pascal Kawasser
+% Oskar Perl
+% Viktoria Pundy
+% Björn Zehetbauer
 %
-%Technische Universität Wien
+% Technische Universität Wien
 %
 
 function main()
 
 %load gui for user input
 [imageName, imagePath, dataset, inputFormula] = gui;
+
+%start stopwatch
+tic;
 
 %load dataset and path for digit recognition
 addpath('CNNDigitRecognition-master\');
@@ -84,7 +88,12 @@ else
 end
 %Placeholder image for labeling
 imagePlaceHolder = imread('testset/placeholder.jpg');
-guiOutput(inputImage, imageOtsu, imageCleaning, imageFC, imagePlaceHolder, output_formula, output_result, output_formula_solution, output_result_solution);
+
+%stop stopwatch
+finish = toc;
+time = strcat(num2str(finish), ' sec');
+
+guiOutput(inputImage, imageOtsu, imageCleaning, imageFC, imagePlaceHolder, output_formula, output_result, output_formula_solution, output_result_solution, time);
 end
 
 

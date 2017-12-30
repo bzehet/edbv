@@ -25,6 +25,8 @@ function varargout = guiOutput(varargin)
 % Last Modified by GUIDE v2.5 28-Dec-2017 10:31:00
 
 % Begin initialization code - DO NOT EDIT
+
+% Author: Pascal Kawasser
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
@@ -69,6 +71,7 @@ set(handles.textSolFormula, 'String', varargin{8});
 set(handles.textSolResult, 'String', varargin{9});
 set(handles.textFormula, 'String', varargin{6});
 set(handles.textResult, 'String', varargin{7});
+set(handles.textTime, 'String', varargin{10});
 
 % Update handles structure
 guidata(hObject, handles);
