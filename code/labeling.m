@@ -11,6 +11,9 @@ function [result, boolRotate] = labeling(input)
 [labels, num] = C_C_L(input);
 %CONNECTED COMPONENT LABELING /END
 
+if (num > 30)
+    error('Too many components');
+end
 %Method to combine the lines of equals sign:
 %saving column numbers of each label (stored per column)
 check = zeros(num,size(input,2));

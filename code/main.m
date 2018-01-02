@@ -40,11 +40,6 @@ if (~boolRot)
     imageFC = imrotate(imageFC,180);
     [imageLet, ~] = labeling(imageFC);
 end
-
-sizeOf = size(imageLet);
-if(sizeOf > 30)
-    error('Too many components');
-end
     
 outputLabeling = labelImage(imageFC, imageLet);
 imshow(outputLabeling);
