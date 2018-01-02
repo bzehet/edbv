@@ -14,7 +14,8 @@ function ret = imrotate2(image, degree)
     offset = [min([tl(1), tr(1), bl(1), br(1)]) - 1, min([tl(2), tr(2), bl(2), br(2)]) - 1];
     new_size = [max([tl(3), tr(3), bl(3), br(3)]) - offset(1), max([tl(4), tr(4), bl(4), br(4)]) - offset(2)];
     
-    image_rot = false(new_size(1),new_size(2));
+%     image_rot = false(new_size(1),new_size(2));
+    image_rot = zeros(new_size(1),new_size(2));
     
     for row = 1:image_size(1)
         for col = 1:image_size(2)
