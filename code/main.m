@@ -42,7 +42,7 @@ imageOtsu = otsu(inputImage);
 imageCleaning = cleaning(imageOtsu);
 
 %Geometrische Transformation
-imageTransformation = imalign(1- imageCleaning, 5);
+imageTransformation = imalign(1- imageCleaning, 5, 0.1);
 imageFC = fragmentCleaner(imageTransformation);
 
 %Connected Component Labeling
