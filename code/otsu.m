@@ -2,28 +2,58 @@
 %Treshold nach Otsu
 %
 function[img] = otsu(image)
-    I0 = image;
+
+%% pre-processing   
+I1 = image;
+
+I2  = imcomplement(rgb2gray(I1)); % invert image and convert to grayscale
+
+background = imopen(I2,strel('disk',15));%approximate background
+
+I3 = I2 - background; % subtract background from image
+
+I4 = imadjust(I3); % increasing contrast
+
+%% OTSU thresholding
+
+histValues = imhist(I4,256)/ numel(I4); %normalized histogram
+
+mK = 0;
+w0 = 0;
+max = 0.0;
+mT = dot( (0:255) , histValues ); %total mean level
+
+for i = 1:256
     
-    I1 = I0;
-%imshow(I)
+    %probabilities of class occurrence
+    w0 = w0 + histValues(i);    
+    w1 = 1 - w0;                
+    
+    if (w0 == 0 || w1 == 0) % prevent division by zero
+        continue;
+    end
+    
+    mK = mK + ( (i-1) * histValues(i) );
+    
+    %class mean levels
+    m0 = (mK / w0);
+    m1 = (mT - mK) / w1;
+    
+    %between class variance
+    between = w0 * w1 * (m0 - m1) ^ 2;
+    
+    if ( between >= max ) %determin the maximum threschold
+        level = i;
+        max = between;
+        
+    end
+end
+%% post-processing   
 
-I2  = imcomplement(rgb2gray(I1)); % invertieren und in grauwerte umwandeln
-%imshow(I2)
+im = im2bw(I4,level/256); % convert to binary image using the threschold
 
-background = imopen(I2,strel('disk',15));%approzimiert den hintergrung 
+im = bwareaopen(im, 50); % remove noise
 
-I3 = I2 - background; % hintergrund vom grauwertbild abziehen
-%imshow(I3)
-
-I4 = imadjust(I3); % kontrast erhöhen
-%imshow(I4);
-
-level = graythresh(I4); %otsu matlab standard funktion
-
-
-im = im2bw(I4,level); % in binärbild umwandeln mit vorher ausgerechneten threshhold
-
-im = bwareaopen(im, 50); % rauschen entfernen
 im_r = imcomplement(im);
 
 img = im_r ;
