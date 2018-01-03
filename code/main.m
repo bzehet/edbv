@@ -29,7 +29,7 @@ imageCl = cleaning(imageBin);
 imshow(imageCl);
 
 %Geometrische Transformation
-imageRot = imalign(1- imageCl, 5);
+imageRot = imalign(1- imageCl, 5, 0.1);
 imshow(imageRot);
 imageFC = fragmentCleaner(imageRot);
 imshow(imageFC);
