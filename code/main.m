@@ -1,83 +1,100 @@
-%Formelerkennung
+% Formelerkennung
+% Author: Pascal Kawasser
 %
-%Bernhard Martin Aschl
-%Pascal Kawasser
-%Oskar Perl
-%Viktoria Pundy
-%Björn Zehetbauer
+% Bernhard Martin Aschl
+% Pascal Kawasser
+% Oskar Perl
+% Viktoria Pundy
+% Björn Zehetbauer
 %
-%Technische Universität Wien
+% Technische Universität Wien
 %
+
+function main()
+
+%load gui for user input
+[imageName, imagePath, dataset, inputFormula] = gui;
+
+%start stopwatch
+tic;
 
 %load dataset and path for digit recognition
 addpath('CNNDigitRecognition-master\');
 load('CNNDigitRecognition-master/hundredEpochs.mat');
 
 %load solutions for testimages
-filename = 'testset/image_numbers.xlsx';
+solutionFilename = 'testset/image_numbers.xlsx';
 
-solution_Result = xlsread(filename,'C3:C102');
-[num, solution_Formula, raw] = xlsread(filename, 'B3:B102');
-imageNumber = 79;%62
+%load solutions if the provided dataset is used
+if(dataset)
+[num, solution_Formula, raw] = xlsread(solutionFilename, 'B3:C102'); %#ok<ASGLU>
+imageNumber = str2num(strtok(imageName, '.')); %#ok<ST2NM>
+    if(isempty(imageNumber))
+       error('Falls ein eigener Datensatz verwendet wird darf die Checkbox "Datensatz" nicht markiert werden');
+    end
+end
 
-image = imread(strcat('testset/', num2str(imageNumber), '.jpg'));
+%load input
+inputImage = imread(strcat(imagePath, imageName));
 
 %Threshold nach Otsu
-imageBin = otsu(image);
-imshow(imageBin);
-imageCl = cleaning(imageBin);
-imshow(imageCl);
+imageOtsu = otsu(inputImage);
+imageCleaning = cleaning(imageOtsu);
 
 %Geometrische Transformation
-imageRot = imalign(1- imageCl, 5, 0.1);
-imshow(imageRot);
-imageFC = fragmentCleaner(imageRot);
-imshow(imageFC);
+imageTransformation = imalign(1- imageCleaning, 5);
+imageFC = fragmentCleaner(imageTransformation);
 
 %Connected Component Labeling
-[imageLet, boolRot] = labeling(imageFC);
+[imageLabeling, boolRot] = labeling(imageFC);
 if (~boolRot)
-    imageFC = imrotate(imageFC,180);
-    [imageLet, ~] = labeling(imageFC);
+    [imageLabeling, ~] = labeling(imrotate(imageFC,180));
 end
-    
-outputLabeling = labelImage(imageFC, imageLet);
-imshow(outputLabeling);
 
-symbols = symbolRecognition(imageLet(:,:,1:end-1));
-    
+sizeOf = size(imageLabeling);
+if(sizeOf > 30)
+    error('Too many components');
+end  
 
-%Thinning
-%currently not required
+%Symbol Recognition
+symbolsFormula = symbolRecognition(imageLabeling(:,:,1:end-1));
+    
 
 %Digit Recognition
-[formula, digits] = calculateFormula(cnn, imageLet(:,:,1:end-1), symbols);
+output_formula = calculateFormula(cnn, imageLabeling(:,:,1:end-1), symbolsFormula);
 
-%only for digit testing:
-fprintf('Formel Vorlage: %s\n', solution_Formula{imageNumber+1});
-fprintf('Formel Berechn: %s\n\n', formula);
-fprintf('Struktur Berec: %s\n', symbols(1:end-1));
-fprintf('Zahlen Berechn: ');
-disp(digits);
+
 %print the result, disabled for test purpose
-% result = calculate(formula);
-% fprintf('Formel: %s\n', formula);
-% fprintf('Ergebnis: %d\n', result);
-% sol = solution(imageNumber + 1);
-% fprintf('Lösung: %d\n', sol);
-% if(result == sol)
-%     fprintf('Das Ergebnis ist korrekt!\n\n');
-% else
-%     fprintf('Das Ergebnis ist nicht korrekt!\n\n');
-% end
+try
+    output_result = calculate(output_formula);
+catch
+    output_result = 'Ergebnis konnte nicht berechnet werden';
+end
+if(dataset)
+    output_formula_solution = solution_Formula(imageNumber+1,1);
+    output_result_solution = calculate(output_formula_solution{1});
+else
+    if(isempty(inputFormula))
+        %can't check result
+        output_formula_solution = 'Es wurde keine Formel eingegeben';
+        output_result_solution = '?';
+    else
+        if(inputFormula(end) == '=')
+           inputFormula = inputFormula(1:end-1); 
+        end
+        output_formula_solution = inputFormula;
+        output_result_solution = calculate(output_formula_solution);
+    end
+end
+%Placeholder image for labeling
+imagePlaceHolder = imread('testset/placeholder.jpg');
+
+%stop stopwatch
+finish = toc;
+time = strcat(num2str(finish), ' sec');
+
+guiOutput(inputImage, imageOtsu, imageCleaning, imageFC, imagePlaceHolder, output_formula, output_result, output_formula_solution, output_result_solution, time);
+end
 
 
 
-%Methodenpipeline:
-% - Otsu
-% - Cleaning
-% - Rotation (Projektion)
-% - Labeling
-% - Rechenzeichenerkennung (Projektion)
-% - Digit Recognition
-% - calculation
