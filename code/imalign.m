@@ -15,6 +15,10 @@
 %             The smaller the number, the longer then runtime. 
 %             (Steps: 180/degree)
 %             'degree' could also be negative (direction of rotation).
+%scale  ..... For runtime-efficiency the input-image can be scaled. The
+%             final rotation will be calulated with the original size of
+%             the input-image.
+%
 %Return:
 %The aligned image
 %(Could be upsidedown; Could be bigger then the original)
