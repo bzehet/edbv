@@ -78,7 +78,7 @@ function[isPlus]=isAPlus(input)
     else
         %check both projections
         for c=0:1
-            checkSide = sum(input, 2);
+            checkSide = sum2(input, 2);
             csLength=size(checkSide,1);
                 
             [maximum, index]=max(checkSide);
@@ -110,7 +110,7 @@ function[isMinus]=isAMinus(input)
     input=input(cropTall+1:tall, cropLong+1:long);
     
     isMinus=0;
-    horizProj=rot90(sum(input,1));
+    horizProj=rot90(sum2(input,1));
     
     %Standard deviation in percent of mean.
     stdPerc=std(horizProj)/mean(horizProj);
@@ -135,7 +135,7 @@ function[isDivide]=isADivide(input)
     if(percentageContent>0.55)
         isDivide=0;
     else
-        hProj= sum(input, 2);
+        hProj= sum2(input, 2);
         vProj= rot90(sum(input));
         hProjOK=(std(hProj)/mean(hProj))<0.30;
         %on the sides it is a little crooked, but in the middle a / should be about
@@ -181,7 +181,7 @@ function[isBracket]=isABracket(input)
     %brackets aren't upright very often, so it has to be rotated
     input=rotateUpright(input, 20, 5);
     
-    horizProj=rot90(sum(input,1));
+    horizProj=rot90(sum2(input,1));
     half=size(horizProj,1)/2;
     firstPortion=sum(horizProj(1:floor(half)));
     secondPortion=sum(horizProj(ceil(half):floor(half*2)));
@@ -199,7 +199,7 @@ function[isBracket]=isABracket(input)
         isBracket=0;
     end
     
-    vertProj=sum(input,2);
+    vertProj=sum2(input,2);
     %standard deviation in percent
     %a bracket can be written very clumsily, so the std could be
     %very high.

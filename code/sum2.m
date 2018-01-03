@@ -28,7 +28,11 @@ function ret = sum2(mat, dim)
     count = zeros(1,ar_size);
     for x = 1:ar_size
         for y = 1:mat_size
-            count(x) = count(x) + mat(x, y);
+            if dim == 1
+                count(x) = count(x) + mat(y, x);
+            elseif dim == 2
+                count(x) = count(x) + mat(x, y);
+            end
         end
     end
     ret = count;
