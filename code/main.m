@@ -48,8 +48,12 @@ imageFC = fragmentCleaner(imageTransformation);
 %Connected Component Labeling
 [imageLabeling, boolRot] = labeling(imageFC);
 if (~boolRot)
-    [imageLabeling, ~] = labeling(imrotate(imageFC,180));
+    imageFC=imrotate(imageFC,180);
+    [imageLabeling, ~] = labeling(imageFC);
 end
+
+%labels image visually
+imageShowLabeling = labelImage(imageFC, imageLabeling);
 
 sizeOf = size(imageLabeling);
 if(sizeOf > 30)
@@ -86,14 +90,12 @@ else
         output_result_solution = calculate(output_formula_solution);
     end
 end
-%Placeholder image for labeling
-imagePlaceHolder = imread('testset/placeholder.jpg');
 
 %stop stopwatch
 finish = toc;
 time = strcat(num2str(finish), ' sec');
 
-guiOutput(inputImage, imageOtsu, imageCleaning, imageFC, imagePlaceHolder, output_formula, output_result, output_formula_solution, output_result_solution, time);
+guiOutput(inputImage, imageOtsu, imageCleaning, imageFC, imageShowLabeling, output_formula, output_result, output_formula_solution, output_result_solution, time);
 end
 
 
