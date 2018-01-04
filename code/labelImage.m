@@ -3,8 +3,8 @@
 function[output]=labelImage(input, labelmatrix)
 index = 1;
 [row,column]=find(input==1);
-input = input(max(min(row)-50,0):min(max(row)+50,end),max(min(column)-50,0):min(max(column)+50,end));
-labelmatrix=labelmatrix(max(min(row)-50,0):min(max(row)+50,end),max(min(column)-50,0):min(max(column)+50,end),:);
+input = input(max(min(row)-50,1):min(max(row)+50,end),max(min(column)-50,1):min(max(column)+50,end));
+labelmatrix=labelmatrix(max(min(row)-50,1):min(max(row)+50,end),max(min(column)-50,1):min(max(column)+50,end),:);
 position = zeros(size(labelmatrix,3)-1,2);
 value = zeros(1,size(labelmatrix,3)-1);
 %iterates over every letter in given labelmatrix

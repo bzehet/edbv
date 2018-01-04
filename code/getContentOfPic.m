@@ -2,7 +2,7 @@
 %This function extracts the portion of an input picture where content is present.
 %The input doesn't necessarily has to be black and white.
 %Returns -1, if input is empty.
-function[symbolPic]=getSymbolPortionOfBWpic(input)
+function[symbolPic]=getContentOfPic(input)
     %Find indices of all non-zero pixels
     indSubPic=find(input);
     
