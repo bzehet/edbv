@@ -18,14 +18,16 @@ function ret = sum2(mat, dim)
     if dim == 1
         ar_size = size(mat, 2);
         mat_size = size(mat,1);
+        count = zeros(1,ar_size);
     elseif dim == 2
         ar_size = size(mat, 1);
         mat_size = size(mat,2);
+        count = zeros(ar_size,1);
     else 
         ret = mat;
         return
     end
-    count = zeros(1,ar_size);
+    
     for x = 1:ar_size
         for y = 1:mat_size
             if dim == 1
@@ -36,5 +38,6 @@ function ret = sum2(mat, dim)
         end
     end
     ret = count;
+%       ret = sum(mat, dim);
 end
 
