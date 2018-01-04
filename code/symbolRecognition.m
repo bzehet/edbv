@@ -13,7 +13,7 @@ function [result]=symbolRecognition(inputPics)
     for i=1:amount
         pic=inputPics(:,:,i);
         %crops image to relevant part
-        pic=getSymbolPortionOfBWpic(pic);
+        pic=getContentOfPic(pic);
         
         %if the image contains too little information it is suspected, that
         %it was only noise. Then it checks for each individual symbol in
@@ -230,13 +230,13 @@ result = input;
 for i=0:steps
     
     %positive
-    currentPic=getSymbolPortionOfBWpic(imrotate(input, stepDegree*i));
+    currentPic=getContentOfPic(imrotate(input, stepDegree*i));
     if(size(currentPic,1)>size(result,1))
         result=currentPic;
     end
     
     %negative
-    currentPic=getSymbolPortionOfBWpic(imrotate(input, stepDegree*i*-1));
+    currentPic=getContentOfPic(imrotate(input, stepDegree*i*-1));
     if(size(currentPic,1)>size(result,1))
         result=currentPic;
     end

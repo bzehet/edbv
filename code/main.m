@@ -53,7 +53,7 @@ if (~boolRot)
 end
 
 %labels image visually
-imageShowLabeling = labelImage(imageFC, imageLabeling);
+imageShowLabeling = imresize(labelImage(imageFC, imageLabeling),3);
 
 sizeOf = size(imageLabeling);
 if(sizeOf > 30)

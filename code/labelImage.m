@@ -17,5 +17,5 @@ for i = 1:size(labelmatrix,3)-1
     value(1,index)=index;
     index = index+1;
 end
-output = insertText(input, position, value, 'BoxColor', 'green', 'TextColor', 'black', 'FontSize', 19);
+output = insertText(input, position, value, 'Fontsize', 30);
 end
