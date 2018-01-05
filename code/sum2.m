@@ -38,5 +38,6 @@ function ret = sum2(mat, dim)
         end
     end
     ret = count;
+%     ret = sum(mat, dim);
 end
 
