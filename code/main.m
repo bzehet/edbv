@@ -14,6 +14,10 @@ function main()
 
 %load gui for user input
 [imageName, imagePath, dataset, inputFormula] = gui;
+if(isempty(imageName))
+   disp('Programm wurde durch User beendet');
+   return;
+end
 
 %start stopwatch
 tic;

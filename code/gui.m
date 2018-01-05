@@ -88,7 +88,14 @@ function pushbuttonCalc_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbuttonCalc (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-figure1_CloseRequestFcn(hObject, eventdata, handles);
+global imageName;
+if(isempty(imageName))
+    warndlg('Bitte ein Bild wählen!');
+elseif(imageName == 0)
+    warndlg('Bitte ein Bild wählen!');
+else
+    figure1_CloseRequestFcn(hObject, eventdata, handles);
+end
 
 
 
@@ -121,12 +128,7 @@ function figure1_CloseRequestFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: delete(hObject) closes the figure
-global imageName;
-if(isempty(imageName))
-    warndlg('Bitte ein Bild wählen!');
-else
-    uiresume();
-end
+uiresume();
 
 
 
@@ -138,7 +140,9 @@ function pushbuttonImgSelect_Callback(hObject, eventdata, handles)
 global imageName;
 global imagePath;
 [imageName, imagePath] = uigetfile({'*.jpg';'*.jpeg';'*.png'}, 'Select the picture','testset/');
-imshow(imread(strcat(imagePath, imageName)));
+if(imageName ~= 0)
+    imshow(imread(strcat(imagePath, imageName)));
+end
 
 
 % --- Executes on button press in checkboxDataset.
