@@ -1,5 +1,9 @@
+%Author: Oskar Perl
 %
-%Treshold nach Otsu
+%Description:
+%'otsu' converts the input image into a binaray image using otsus method
+%to determin the optimal threschold
+%returns a binary image
 %
 function[img] = otsu(image)
 
@@ -29,7 +33,8 @@ for i = 1:256
     w0 = w0 + histValues(i);    
     w1 = 1 - w0;                
     
-    if (w0 == 0 || w1 == 0) % prevent division by zero
+    % prevent division by zero
+    if (w0 == 0 || w1 == 0) 
         continue;
     end
     
@@ -42,8 +47,9 @@ for i = 1:256
     %between class variance
     between = w0 * w1 * (m0 - m1) ^ 2;
     
-    if ( between >= max ) %determin the maximum threschold
-        level = i;
+    %checking if current between class variance is a maximum
+    if ( between >= max ) 
+        level = i; %Setting the threshold level to the current value of i
         max = between;
         
     end
