@@ -17,6 +17,9 @@ function main()
 if(isempty(imageName))
    disp('Programm wurde durch User beendet');
    return;
+elseif(imageName == 0)
+   disp('Programm wurde durch User beendet');
+   return;
 end
 
 %start stopwatch
