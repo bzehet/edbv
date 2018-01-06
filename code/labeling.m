@@ -80,7 +80,7 @@ for j=2:size(image,2)-1
         %yet
         if (image(i,j)==-1)
             label = label + 1;
-            image = recursiveFindNeighbours(image, label, i, j);
+            image = recursiveFindNeighbours(image, label, i, j, 1);
         end
     end
 end
@@ -90,14 +90,18 @@ num = label;
 end
 
 %Labels given pixel and checks if neighbours of it are part of component
-function[result]=recursiveFindNeighbours(image, label, r, c)
+function[result]=recursiveFindNeighbours(image, label, r, c, depth)
 image(r,c)=label;
+if (depth>40000)
+    result = image;
+    return;
+end
 for x=-1:1
     for y =-1:1
         %if neighbour pixel is also white and has not been checked, method
         %is called with new pixel
         if (image(r+x,c+y)==-1)
-            image = recursiveFindNeighbours(image, label, r+x,c+y);
+            image = recursiveFindNeighbours(image, label, r+x,c+y, depth+1);
         end
     end
 end
