@@ -230,13 +230,13 @@ result = input;
 for i=0:steps
     
     %positive
-    currentPic=getContentOfPic(imrotate(input, stepDegree*i));
+    currentPic=getContentOfPic(imrotate2(input, stepDegree*i));
     if(size(currentPic,1)>size(result,1))
         result=currentPic;
     end
     
     %negative
-    currentPic=getContentOfPic(imrotate(input, stepDegree*i*-1));
+    currentPic=getContentOfPic(imrotate2(input, stepDegree*i*-1));
     if(size(currentPic,1)>size(result,1))
         result=currentPic;
     end
