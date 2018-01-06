@@ -62,11 +62,6 @@ end
 %labels image visually
 imageShowLabeling = imresize(labelImage(imageFC, imageLabeling),3);
 
-sizeOf = size(imageLabeling);
-if(sizeOf > 30)
-    error('Too many components');
-end  
-
 %Symbol Recognition
 symbolsFormula = symbolRecognition(imageLabeling(:,:,1:end-1));
     
