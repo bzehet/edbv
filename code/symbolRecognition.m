@@ -1,3 +1,5 @@
+%Author: Bernhard Martin Aschl
+
 %gets a full-size Picture-Array and returns an array of chars
 %it iterates over the pictures and crops them. Then it checks which symbol
 %(+,-,*,/,(,)) it is. At the end it returns a char-array in the form of
