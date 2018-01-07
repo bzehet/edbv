@@ -7,7 +7,8 @@ input = input(max(min(row)-50,1):min(max(row)+50,end),max(min(column)-50,1):min(
 labelmatrix=labelmatrix(max(min(row)-50,1):min(max(row)+50,end),max(min(column)-50,1):min(max(column)+50,end),:);
 position = zeros(size(labelmatrix,3)-1,2);
 value = zeros(1,size(labelmatrix,3)-1);
-%iterates over every letter in given labelmatrix
+if (size(labelmatrix,3)>1)
+    %iterates over every letter in given labelmatrix
 for i = 1:size(labelmatrix,3)-1
     [r,c]=find(labelmatrix(:,:,i)==1);
     if (isempty(r)||isempty(c))
@@ -20,5 +21,8 @@ for i = 1:size(labelmatrix,3)-1
     value(1,index)=index;
     index = index+1;
 end
-output = insertText(input, position, value, 'Fontsize', 25);
+    output = insertText(input, position, value, 'Fontsize', 25);
+else
+    output = input;
+end
 end
